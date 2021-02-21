@@ -10,7 +10,7 @@ const config = {
     app: {
         scheme: process.env.APP_SCHEME,
         host: process.env.APP_HOST,
-        port: parseInt(process.env.APP_PORT) || 4300,
+        port: parseInt(process.env.PORT) || 4300,
         apiDocUrl: process.env.APP_API_DOC_URL
     },
     web: {
