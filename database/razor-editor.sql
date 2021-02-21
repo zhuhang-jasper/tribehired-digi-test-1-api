@@ -12,8 +12,8 @@ flush privileges;
 SELECT user FROM mysql.user;
 
 -- Create Account Table
-DROP TABLE tribehired_digi_test.account;
-CREATE TABLE tribehired_digi_test.account
+DROP TABLE IF EXISTS account;
+CREATE TABLE account
 (Id INT NOT NULL AUTO_INCREMENT,
 Email VARCHAR(45) NOT NULL,
 Name VARCHAR(45) NOT NULL,
@@ -23,9 +23,8 @@ UpdatedDate TIMESTAMP,
 CreatedBy VARCHAR(25),
 UpdatedBy VARCHAR(25),
 PRIMARY KEY (Id)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-CREATE UNIQUE INDEX Index_Account_Email_Unique ON tribehired_digi_test.account (Email);
-CREATE INDEX Index_Account_Name ON tribehired_digi_test.account (Name);
-
+CREATE UNIQUE INDEX Index_Account_Email_Unique ON account (Email);
+CREATE INDEX Index_Account_Name ON account (Name);
 
 -- Some useful queries
 delete from account where 1=1;
