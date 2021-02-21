@@ -1,0 +1,257 @@
+swagger: "2.0"
+info:
+  version: 1.0.0
+  title: TribeHired Digi RESTful Server
+  description: Swagger Doc for REST API
+  contact:
+    name: Jasper Loo Zhu Hang
+    email: zhuhang.jasper@gmail.com
+basePath: /api
+# schemes:
+  # - https
+  # - http
+securityDefinitions:
+  BearerJwt:
+    type: apiKey
+    in: header
+    name: Authorization
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /login:
+    x-swagger-router-controller: auth
+    post:
+      description: authenticate
+      operationId: authenticate
+      parameters:
+        - name: request
+          description: request
+          in: body
+          required: false
+          schema:
+            $ref: '#/definitions/loginReq'
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/loginResp'
+        default:
+          description: Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+
+  /accounts:
+    x-swagger-router-controller: accounts
+    get:
+      tags:
+        - Account
+      description: retrieve accounts
+      operationId: getAccounts
+      security:
+        - BearerJwt: []
+      parameters:
+        - in: query
+          name: name
+          type: string
+          required: false
+        - in: query
+          name: pageSize
+          type: integer
+          required: false
+        - in: query
+          name: currentPage
+          type: integer
+          required: false
+        - in: query
+          name: sortField
+          type: string
+          required: false
+        - in: query
+          name: sortAscending
+          type: boolean
+          required: false
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/accountsGetResp'
+        default:
+          description: Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+    post:
+      tags:
+        - Account
+      description: register account
+      operationId: registerAccount
+      parameters:
+        - name: request
+          in: body
+          description: request
+          required: true
+          schema:
+            $ref: '#/definitions/accountRegisterReq'
+      responses:
+        "200":
+          description: General
+          schema:
+            $ref: '#/definitions/accountRegisterResp'
+        default:
+          description: Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+
+definitions:
+  GeneralResponse:
+    required:
+      - reqId
+      - statusCode
+      - body
+    properties:
+      reqId:
+        type: string
+        maxLength: 50
+      statusCode:
+        type: string
+        maxLength: 10
+      body:
+        type: object
+
+  QueryResultResponse:
+    required:
+      - sort
+      - totalRecord
+      - totalPages
+      - currentPage
+    properties:
+      sort:
+        properties:
+          sortField:
+            type: string
+          sortAscending:
+            type: boolean
+      totalRecord:
+        type: integer
+      totalPages:
+        type: integer
+      currentPage:
+        type: integer
+      result:
+        type: array
+        items:
+          type: object
+          description: definition varies on endpoints
+
+  ErrorResponse:
+    required:
+      - reqId
+      - statusCode
+      - errorCode
+      - errorMessage
+    properties:
+      reqId:
+        type: string
+        maxLength: 50
+      statusCode:
+        type: string
+        maxLength: 10
+      errorCode:
+        type: string
+        maxLength: 100
+      errorMessage:
+        type: string
+
+  loginReq:
+    required:
+      - email
+      - password
+    properties:
+      email:
+        type: string
+        format: email
+        description: account email
+      password:
+        type: string
+        format: password
+        description: account password
+
+  loginResp:
+    allOf:
+    - $ref: '#/definitions/GeneralResponse'
+    - type: object
+      properties:
+        body:
+          type: object
+          properties:
+            id:
+              type: integer
+              description: account id
+            name:
+              type: string
+              description: account name
+            email:
+              type: string
+              description: account email address
+            token:
+              type: string
+              description: jwt login token
+            expiresIn:
+              type: integer
+              description: jwt login token validaty in seconds
+
+  accountsGetResp:
+    allOf:
+    - $ref: '#/definitions/GeneralResponse'
+    - type: object
+      properties:
+        body:
+          allOf:
+          - $ref: '#/definitions/QueryResultResponse'
+          - type: object
+            properties:
+              result:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      description: account id
+                    name:
+                      type: string
+                      description: account name
+                    email:
+                      type: string
+                      description: account email address
+
+  accountRegisterReq:
+    required:
+      - name
+      - email
+      - password
+    properties:
+      name:
+        type: string
+        description: account name
+      email:
+        type: string
+        format: email
+        description: account email
+      password:
+        type: string
+        format: password
+        description: account password
+
+  accountRegisterResp:
+    allOf:
+    - $ref: '#/definitions/GeneralResponse'
+    - type: object
+      properties:
+        body:
+          properties:
+            id:
+              type: integer
+              description: id of the newly created account
+
