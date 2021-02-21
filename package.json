@@ -4,8 +4,7 @@
     "description": "",
     "main": "app.js",
     "scripts": {
-        "dev": "cross-env NODE_ENV=dev nodemon app.js",
-        "start": "cross-env NODE_ENV=dev node app.js",
+        "start": "cross-env NODE_ENV=dev nodemon app.js",
         "start-prod": "cross-env NODE_ENV=prod node app.js"
     },
     "dependencies": {

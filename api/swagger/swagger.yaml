@@ -23,6 +23,8 @@ paths:
   /login:
     x-swagger-router-controller: auth
     post:
+      tags:
+        - Account
       description: authenticate
       operationId: authenticate
       parameters:
