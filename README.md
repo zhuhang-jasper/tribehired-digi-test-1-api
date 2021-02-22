@@ -1,8 +1,10 @@
 # tribehired-digi-test-1-api
 
+Demo: https://tribehired-digi-test-1-api.herokuapp.com/api-docs/
+
 ### Setup API:
 
-NodeJS Swagger: http://localhost:4300/api-docs/
+Local Swagger: http://localhost:4300/api-docs/
 
 ```
 npm install
